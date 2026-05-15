@@ -57,6 +57,7 @@ export default function DocumentPreview({ result, documents, onPassToShipbill }:
   const [currentPage, setCurrentPage] = useState(1);
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(500);
+  const [pdfPageWidth, setPdfPageWidth] = useState(595); // native PDF width in points
 
   // Find documents belonging to this shipbill
   const shipbillDocs = result ? documents.filter((d) => d.shipbillRef === result.shipbillRef) : [];
@@ -253,24 +254,29 @@ export default function DocumentPreview({ result, documents, onPassToShipbill }:
                     width={containerWidth - 16}
                     renderTextLayer={false}
                     renderAnnotationLayer={false}
+                    onLoadSuccess={(page) => setPdfPageWidth(page.originalWidth || page.width)}
                   />
                 </Document>
                 {/* Highlight overlay */}
-                {activeIssue?.highlight && activeIssue.highlight.page === currentPage && (
-                  <div
-                    className="absolute border-2 border-red-500 bg-red-500/15 rounded-sm pointer-events-none"
-                    style={{
-                      left: `${activeIssue.highlight.x}%`,
-                      top: `${activeIssue.highlight.y}%`,
-                      width: `${activeIssue.highlight.w}%`,
-                      height: `${activeIssue.highlight.h}%`,
-                    }}
-                  >
-                    <div className="absolute -top-6 left-0 bg-red-600 text-white text-[10px] font-medium px-2 py-0.5 rounded whitespace-nowrap shadow-sm">
-                      {activeIssue.rule}
+                {activeIssue?.highlight && activeIssue.highlight.page === currentPage && (() => {
+                  const scale = (containerWidth - 16) / pdfPageWidth;
+                  const hl = activeIssue.highlight;
+                  return (
+                    <div
+                      className="absolute border-2 border-red-500 bg-red-500/15 rounded-sm pointer-events-none"
+                      style={{
+                        left: hl.x * scale,
+                        top: hl.y * scale,
+                        width: hl.w * scale,
+                        height: hl.h * scale,
+                      }}
+                    >
+                      <div className="absolute -top-6 left-0 bg-red-600 text-white text-[10px] font-medium px-2 py-0.5 rounded whitespace-nowrap shadow-sm">
+                        {activeIssue.rule}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  );
+                })()}
               </div>
             ) : (
               <div className="flex items-center justify-center flex-1 min-h-[400px] text-sm text-gray-400">

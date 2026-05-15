@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { ValidationResult, UploadedDocument, IngestionSource } from './types';
-import { allShipbills, realShipbills, getHardcodedResults } from './ingestionData';
+import { allShipbills, getHardcodedResults } from './ingestionData';
 import DocumentPreview from './components/DocumentPreview';
 import Toast, { ToastMessage } from './components/Toast';
 

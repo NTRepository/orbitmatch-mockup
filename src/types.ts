@@ -40,7 +40,7 @@ export interface ValidationIssue {
   severity: 'error' | 'warning';
   rule: string;
   relatedDocName?: string; // which document in the shipbill this issue relates to
-  highlight?: { page: number; x: number; y: number; w: number; h: number }; // % coordinates on page
+  highlight?: { page: number; x: number; y: number; w: number; h: number }; // PDF point coordinates (72 dpi)
 }
 
 export interface ValidationResult {
