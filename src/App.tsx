@@ -69,8 +69,6 @@ function App() {
         const processed = { ...item, result: hardcoded };
         if (hardcoded.status === 'pass') {
           setPassed((prev) => [...prev, processed]);
-          const id = `toast_${Date.now()}_${item.id}`;
-          setToasts((prev) => [...prev, { id, text: `${item.referenceNumber} — all checks passed. Shipbill status updated in customer ERP system.` }]);
         } else {
           setErrors((prev) => [...prev, processed]);
         }
@@ -85,8 +83,6 @@ function App() {
           issues: [],
         };
         setPassed((prev) => [...prev, { ...item, result: passResult }]);
-        const id = `toast_${Date.now()}_${item.id}`;
-        setToasts((prev) => [...prev, { id, text: `${item.referenceNumber} — all checks passed. Shipbill status updated in customer ERP system.` }]);
       }
     }, 5000 + Math.random() * 1000); // Processing takes 5-6s
   }, []);
