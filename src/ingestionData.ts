@@ -848,20 +848,20 @@ export function getHardcodedResults(): ValidationResult[] {
       type: "country_specific",
       issues: [
         {
-          field: "action_vietnam_eur1",
+          field: "vietnam_eur1_present",
           expected:
             "Original EUR1 Movement Certificate required for Vietnam origin shipments",
           actual:
-            "Vietnam origin shipment requires an original EUR1 Movement Certificate, but none was found.",
+            "Vietnam origin shipment requires an original EUR1 Movement Certificate, but none was found in the file.",
           severity: "error",
           rule: "EUR1 required for Vietnam origin",
           relatedDocName: "Supporting Documents.pdf",
         },
         {
-          field: "action_transport_signed",
+          field: "transport_original",
           expected: "Transport document must be an original without watermarks",
           actual:
-            "FCR contains a large background watermark \'COPY\'; transport document must be an ORIGINAL.",
+            "FCR carries a large background 'COPY' watermark; the transport document must be an ORIGINAL.",
           severity: "error",
           rule: "Transport document must be original",
           relatedDocName: "Transport Document.pdf",
@@ -873,33 +873,23 @@ export function getHardcodedResults(): ValidationResult[] {
       type: "shipment",
       issues: [
         {
-          field: "index_transport_doc_present",
+          field: "transport_original",
           expected: "Valid original transport document must be present",
           actual:
-            "Transport document FCR000951944 is a COPY (watermarked), which is not acceptable as a valid original document.",
+            "Transport document is a COPY (background watermark) and is not acceptable as a valid original.",
           severity: "error",
           rule: "Transport document must be original",
           relatedDocName: "Transport Document.pdf",
           highlight: { page: 1, x: 60, y: 300, w: 475, h: 240 },
         },
         {
-          field: "action_purchase_contract_present",
+          field: "purchase_contract_present",
           expected: "Purchase Contract or Order Confirmation must be present",
           actual:
-            "Purchase Contract/Order Confirmation not found in Supporting Documents, Transport Document, or Export Declaration files.",
+            "Purchase Contract / Order Confirmation was not found in the Supporting Documents.",
           severity: "error",
           rule: "Missing Purchase Contract",
           relatedDocName: "Supporting Documents.pdf",
-        },
-        {
-          field: "action_transport_doc_present",
-          expected: "Original transport document must be uploaded",
-          actual:
-            "Transport document is a non-original copy (watermarked); please upload the original FCR.",
-          severity: "error",
-          rule: "Transport document is a copy",
-          relatedDocName: "Transport Document.pdf",
-          highlight: { page: 1, x: 60, y: 300, w: 475, h: 240 },
         },
       ],
     },
@@ -907,20 +897,20 @@ export function getHardcodedResults(): ValidationResult[] {
       type: "invoice",
       issues: [
         {
-          field: "action_total_amount_match",
-          expected: "Invoice numeric total must match written total amount",
+          field: "total_amount_match",
+          expected: "Invoice numeric total must match the written total amount",
           actual:
-            "Invoice numeric total $15,157.44 does not match written total string \'FIFTY THOUSAND...\' ($50,000).",
+            "Invoice numeric total USD 15,157.44 does not match the written total 'FIFTY THOUSAND US DOLLARS'.",
           severity: "error",
           rule: "Invoice total mismatch",
           relatedDocName: "Vendor Invoice.pdf",
-          highlight: { page: 1, x: 450, y: 580, w: 110, h: 35 },
+          highlight: { page: 1, x: 355, y: 491, w: 205, h: 18 },
         },
         {
-          field: "action_transport_signed",
+          field: "transport_original",
           expected: "Transport document must be an original without watermarks",
           actual:
-            "FCR is a DRAFT copy (background watermark) and the signature area is blank.",
+            "FCR is a DRAFT copy (background watermark) and the signature line is blank.",
           severity: "error",
           rule: "Transport document must be original",
           relatedDocName: "Transport Document.pdf",
@@ -932,10 +922,10 @@ export function getHardcodedResults(): ValidationResult[] {
       type: "transport",
       issues: [
         {
-          field: "action_transport_signed",
+          field: "transport_original",
           expected: "Transport document must be an original without watermarks",
           actual:
-            "FCR has prominent D-R-A-F-T background watermark and blank authorization line.",
+            "FCR has a prominent DRAFT background watermark and a blank authorisation line.",
           severity: "error",
           rule: "Transport document must be original",
           relatedDocName: "Transport Document.pdf",
@@ -947,20 +937,20 @@ export function getHardcodedResults(): ValidationResult[] {
       type: "invoice",
       issues: [
         {
-          field: "action_incoterm_match",
-          expected: "Invoice incoterm must match XTS DWPRSI_ATTRBT2 value",
+          field: "incoterm_match",
+          expected: "Invoice incoterm must match the shipment record incoterm (FOB)",
           actual:
-            "Invoice incoterm FCA NINGBO does not match XTS DWPRSI_ATTRBT2 value FOB.",
+            "Invoice incoterm 'FCA NINGBO' does not match the shipment record incoterm 'FOB'.",
           severity: "error",
           rule: "Incoterm mismatch",
           relatedDocName: "Vendor Invoice.pdf",
-          highlight: { page: 1, x: 370, y: 130, w: 180, h: 30 },
+          highlight: { page: 1, x: 315, y: 80, w: 235, h: 20 },
         },
         {
-          field: "action_transport_signed",
+          field: "transport_original",
           expected: "Transport document must be an original without watermarks",
           actual:
-            "FCR is a copy due to prominent large background \'COPY\' watermark identified in the center.",
+            "FCR carries a large background 'COPY' watermark and is not an original.",
           severity: "error",
           rule: "Transport document must be original",
           relatedDocName: "Transport Document.pdf",
@@ -972,15 +962,15 @@ export function getHardcodedResults(): ValidationResult[] {
       type: "invoice",
       issues: [
         {
-          field: "action_gross_weight_match",
+          field: "gross_weight_match",
           expected:
-            "Gross weight must match across shipbill, FCR, PL, and EUR1",
+            "Gross weight must match across the Delivery Note, Invoice and FCR",
           actual:
-            "Shipbill GW: 8331.84 does not match FCR/PL/EUR1 GW: 9331.84.",
+            "Delivery Note gross weight 8,331.84 KG does not match Invoice/FCR gross weight 3,120.50 KG.",
           severity: "error",
           rule: "Gross weight mismatch",
           relatedDocName: "Delivery Note.pdf",
-          highlight: { page: 1, x: 470, y: 430, w: 100, h: 35 },
+          highlight: { page: 1, x: 295, y: 426, w: 180, h: 16 },
         },
       ],
     },
@@ -988,14 +978,14 @@ export function getHardcodedResults(): ValidationResult[] {
       type: "country_specific",
       issues: [
         {
-          field: "action_vietnam_eur1",
-          expected: "EUR1 Box 8/10 must reference the correct PO and SKU",
+          field: "shipment_reference_match",
+          expected: "Invoice shipment reference must match the PO for this shipbill",
           actual:
-            "EUR1 Box 8/10 shows shipment ref 4401031062 instead of PO A250008204 and SKU 3211541.",
+            "Invoice shipment reference 4401031062 does not match PO A250010045; EUR1 preference reference cannot be validated.",
           severity: "error",
-          rule: "EUR1 reference mismatch",
+          rule: "Shipment reference mismatch",
           relatedDocName: "Vendor Invoice.pdf",
-          highlight: { page: 1, x: 15, y: 270, w: 230, h: 20 },
+          highlight: { page: 1, x: 40, y: 278, w: 320, h: 16 },
         },
       ],
     },
@@ -1003,20 +993,20 @@ export function getHardcodedResults(): ValidationResult[] {
       type: "shipment",
       issues: [
         {
-          field: "index_transport_doc_present",
+          field: "transport_doc_present",
           expected:
-            "Transport document (FCR/B/L) must be present in uploaded files",
+            "Transport document (FCR / B/L) must be present in the uploaded files",
           actual:
-            "Transport document (FCR/B/L) is missing from the uploaded files.",
+            "Transport document (FCR / B/L) is missing from the uploaded files.",
           severity: "error",
           rule: "Missing Transport Document",
           relatedDocName: "Supporting Documents.pdf",
         },
         {
-          field: "action_poland_sad",
-          expected: "SAD/Export Declaration required for Poland destination",
+          field: "poland_sad_present",
+          expected: "SAD / Export Declaration required for Poland destination",
           actual:
-            "SAD/Export Declaration for Poland destination is missing from all uploaded files.",
+            "SAD / Export Declaration for the Poland destination is missing from all uploaded files.",
           severity: "error",
           rule: "Missing SAD for Poland",
           relatedDocName: "Supporting Documents.pdf",
@@ -1027,7 +1017,27 @@ export function getHardcodedResults(): ValidationResult[] {
       type: "shipment",
       issues: [
         {
-          field: "index_transport_doc_present",
+          field: "invoice_number_match",
+          expected: "Invoice number must match the shipbill number",
+          actual:
+            "Invoice No 2629HK0190562 does not match Shipbill No 2629HK0190652.",
+          severity: "error",
+          rule: "Invoice number mismatch",
+          relatedDocName: "Vendor Invoice.pdf",
+          highlight: { page: 1, x: 40, y: 80, w: 240, h: 20 },
+        },
+        {
+          field: "vat_destination_match",
+          expected: "Invoice VAT must match the destination country",
+          actual:
+            "Invoice VAT PL5261234567 (Poland) does not match the destination France; buyer entity is in the Netherlands.",
+          severity: "error",
+          rule: "VAT / destination mismatch",
+          relatedDocName: "Vendor Invoice.pdf",
+          highlight: { page: 1, x: 305, y: 150, w: 250, h: 98 },
+        },
+        {
+          field: "transport_doc_present",
           expected: "Transport Document (FCR, B/L, or AWB) must be present",
           actual:
             "Transport Document (FCR, B/L, or AWB) was not found in the uploaded files.",
@@ -1035,80 +1045,31 @@ export function getHardcodedResults(): ValidationResult[] {
           rule: "Missing Transport Document",
           relatedDocName: "Supporting Documents.pdf",
         },
-        {
-          field: "action_purchase_contract_present",
-          expected: "Purchase Contract or Order Confirmation must be present",
-          actual:
-            "Purchase Contract or Order Confirmation was not found in the uploaded documents.",
-          severity: "error",
-          rule: "Missing Purchase Contract",
-          relatedDocName: "Supporting Documents.pdf",
-        },
-        {
-          field: "action_vat_destination_match",
-          expected: "Invoice VAT must match destination country VAT",
-          actual:
-            "Invoice VAT PL5263217969 (Poland) does not match destination France VAT FR03813041969.",
-          severity: "error",
-          rule: "VAT destination mismatch",
-          relatedDocName: "Vendor Invoice.pdf",
-          highlight: { page: 1, x: 280, y: 180, w: 220, h: 80 },
-        },
-        {
-          field: "action_consignee_match",
-          expected: "Invoice Sold To must match destination country entity",
-          actual:
-            "Invoice Sold To Action (PL) does not match destination France entity; FCR missing.",
-          severity: "error",
-          rule: "Consignee mismatch",
-          relatedDocName: "Vendor Invoice.pdf",
-          highlight: { page: 1, x: 280, y: 180, w: 220, h: 80 },
-        },
-        {
-          field: "action_notify_party_match",
-          expected: "Invoice Sold To must match destination country",
-          actual:
-            "Invoice Sold To specifies Poland entity (PL) while destination is France.",
-          severity: "error",
-          rule: "Notify party mismatch",
-          relatedDocName: "Vendor Invoice.pdf",
-          highlight: { page: 1, x: 280, y: 180, w: 220, h: 80 },
-        },
-        {
-          field: "action_invoice_number_match",
-          expected: "Invoice number must match shipbill number",
-          actual:
-            "Invoice No: 2629HK0190562 does not match Shipbill No: 2629HK0190652.",
-          severity: "error",
-          rule: "Invoice number mismatch",
-          relatedDocName: "Vendor Invoice.pdf",
-          highlight: { page: 1, x: 270, y: 80, w: 140, h: 50 },
-        },
       ],
     },
     A25000573811: {
       type: "invoice",
       issues: [
         {
-          field: "action_carton_count_match",
+          field: "carton_count_match",
           expected:
-            "Carton count must match across body, FCR, and Packing List",
+            "Carton count must match across the Invoice, Packing List, and FCR",
           actual:
-            "Body cartons: 494 matches FCR: 494, but mismatches Packing List summary total: 492.",
+            "Invoice carton total 492 does not match the Packing List / FCR carton count 684.",
           severity: "error",
           rule: "Carton count mismatch",
           relatedDocName: "Vendor Invoice.pdf",
-          highlight: { page: 1, x: 330, y: 380, w: 150, h: 30 },
+          highlight: { page: 1, x: 315, y: 430, w: 180, h: 16 },
         },
         {
-          field: "action_final_ports_match",
-          expected: "Shipbill destination must match FCR place of delivery",
+          field: "final_destination_match",
+          expected: "Shipbill destination must match the FCR place of delivery",
           actual:
-            "Shipbill destination: TILBURG conflicts with FCR place of delivery: Zwaagdijk.",
+            "Invoice destination Tilburg conflicts with FCR place of delivery Venlo.",
           severity: "error",
           rule: "Final destination mismatch",
           relatedDocName: "Transport Document.pdf",
-          highlight: { page: 1, x: 150, y: 300, w: 120, h: 30 },
+          highlight: { page: 1, x: 300, y: 586, w: 255, h: 16 },
         },
       ],
     },
@@ -1116,14 +1077,14 @@ export function getHardcodedResults(): ValidationResult[] {
       type: "invoice",
       issues: [
         {
-          field: "action_invoice_number_match",
-          expected: "Invoice number must match shipbill number",
+          field: "invoice_number_match",
+          expected: "Invoice number must match the shipbill number",
           actual:
-            "Extracted Invoice No: A70AG2600752-1 does not match Shipbill No: A70AG2500752-1.",
+            "Extracted Invoice No A70AG2600752-1 does not match Shipbill No A70AG2500752-1.",
           severity: "error",
           rule: "Invoice number mismatch",
           relatedDocName: "Vendor Invoice.pdf",
-          highlight: { page: 1, x: 50, y: 100, w: 150, h: 20 },
+          highlight: { page: 1, x: 40, y: 80, w: 240, h: 20 },
         },
       ],
     },
@@ -1131,14 +1092,14 @@ export function getHardcodedResults(): ValidationResult[] {
       type: "country_specific",
       issues: [
         {
-          field: "action_fsc_validation",
-          expected: "FSC claims must be authorized in XTS DWPRMS_ATTRBT fields",
+          field: "fsc_claim_authorized",
+          expected: "FSC claims must be authorised in the shipment attributes",
           actual:
-            "Unauthorized FSC Claim: Documents mention \'FSC color label\' for items 3004367 and 3013529, but XTS DWPRMS_ATTRBT fields do not contain FSC keywords.",
+            "Unauthorised FSC claim: ASN declares an FSC-certified colour label for items 3004367 and 3013529, but the shipment attributes contain no FSC authorisation.",
           severity: "error",
-          rule: "Unauthorized FSC claim",
+          rule: "Unauthorised FSC claim",
           relatedDocName: "ASN.pdf",
-          highlight: { page: 1, x: 220, y: 510, w: 220, h: 20 },
+          highlight: { page: 1, x: 40, y: 506, w: 430, h: 16 },
         },
       ],
     },
@@ -1146,14 +1107,14 @@ export function getHardcodedResults(): ValidationResult[] {
       type: "invoice",
       issues: [
         {
-          field: "action_po_number_match",
-          expected: "Body PO must appear on Invoice and Packing List",
+          field: "po_number_match",
+          expected: "The shipbill PO must appear on the Invoice and Packing List",
           actual:
-            "Body PO: A240025725 is missing from Invoice and Packing List, which list Shipment Ref: 4400929480 in the PO field.",
+            "Shipbill PO A250010810 is missing from the Invoice, which lists shipment reference 4400929480 in the PO field.",
           severity: "error",
           rule: "PO number mismatch",
           relatedDocName: "Vendor Invoice.pdf",
-          highlight: { page: 1, x: 250, y: 100, w: 200, h: 20 },
+          highlight: { page: 1, x: 40, y: 262, w: 320, h: 16 },
         },
       ],
     },
@@ -1161,14 +1122,14 @@ export function getHardcodedResults(): ValidationResult[] {
       type: "country_specific",
       issues: [
         {
-          field: "action_turkey_atr",
-          expected: "ATR invoice reference must match shipbill number exactly",
+          field: "turkey_atr_reference",
+          expected: "ATR invoice reference must match the shipbill number exactly",
           actual:
-            "ATR invoice reference IH112026000000498 (17 chars) mismatches Shipbill No IH12026000000498 (16 chars); on-board date is also missing.",
+            "ATR reference IH112026000000498 (17 chars) does not match Shipbill No IH12026000000498 (16 chars); on-board date is also missing.",
           severity: "error",
           rule: "ATR reference mismatch",
           relatedDocName: "ATR.pdf",
-          highlight: { page: 1, x: 120, y: 520, w: 200, h: 20 },
+          highlight: { page: 1, x: 40, y: 506, w: 300, h: 16 },
         },
       ],
     },
@@ -1176,15 +1137,15 @@ export function getHardcodedResults(): ValidationResult[] {
       type: "transport",
       issues: [
         {
-          field: "action_container_number_match",
+          field: "container_number_match",
           expected:
-            "Container number must match between Packing List and Shipbill/FCR",
+            "Container number must match between the FCR and Packing List",
           actual:
-            "Packing List container TGBU8052449 does not match Shipbill/FCR container HAMU2049447.",
+            "FCR container TGBU8052449 does not match Packing List container HAMU2049447.",
           severity: "error",
           rule: "Container number mismatch",
           relatedDocName: "Transport Document.pdf",
-          highlight: { page: 1, x: 50, y: 350, w: 300, h: 30 },
+          highlight: { page: 1, x: 40, y: 626, w: 270, h: 16 },
         },
       ],
     },
@@ -1192,23 +1153,23 @@ export function getHardcodedResults(): ValidationResult[] {
       type: "invoice",
       issues: [
         {
-          field: "action_gross_weight_match",
-          expected: "Gross weight must match between PL and FCR",
+          field: "gross_weight_match",
+          expected: "Gross weight must match between the Invoice/PL and FCR",
           actual:
-            "PL Gross Weight 9436.02 does not match FCR Gross Weight 9492.12.",
+            "Invoice / Packing List gross weight 9,436.02 KG does not match FCR gross weight 9,492.12 KG.",
           severity: "error",
           rule: "Gross weight mismatch",
           relatedDocName: "Vendor Invoice.pdf",
-          highlight: { page: 1, x: 300, y: 550, w: 250, h: 35 },
+          highlight: { page: 1, x: 295, y: 466, w: 265, h: 16 },
         },
         {
-          field: "action_cbm_match",
-          expected: "CBM must match between Shipbill/PL and FCR",
-          actual: "Shipbill/PL CBM 23.03 does not match FCR CBM 23.994.",
+          field: "cbm_match",
+          expected: "CBM must match between the Invoice/PL and FCR",
+          actual: "Invoice / Packing List CBM 23.030 does not match FCR CBM 23.994.",
           severity: "error",
           rule: "CBM mismatch",
           relatedDocName: "Vendor Invoice.pdf",
-          highlight: { page: 1, x: 300, y: 550, w: 250, h: 35 },
+          highlight: { page: 1, x: 295, y: 466, w: 265, h: 16 },
         },
       ],
     },
@@ -1216,15 +1177,15 @@ export function getHardcodedResults(): ValidationResult[] {
       type: "invoice",
       issues: [
         {
-          field: "action_agent_nonfood",
+          field: "agent_statement_wording",
           expected:
-            "Invoice Buying Agent statement must include \'as buying agent\' phrase",
+            "Invoice buying-agent statement must include the phrase 'as buying agent'",
           actual:
-            "Invoice Buying Agent statement \'Li & Fung (Trading) Ltd for and on behalf of Action...\' is missing the required \'as buying agent\' phrase.",
+            "Invoice buying-agent statement 'Meridian Sourcing Ltd. for and on behalf of Harbor & Vale Retail B.V.' is missing the required 'as buying agent' phrase.",
           severity: "error",
           rule: "Agent wording missing required phrase",
           relatedDocName: "Vendor Invoice.pdf",
-          highlight: { page: 1, x: 50, y: 750, w: 400, h: 40 },
+          highlight: { page: 1, x: 40, y: 774, w: 510, h: 18 },
         },
       ],
     },
@@ -1232,34 +1193,34 @@ export function getHardcodedResults(): ValidationResult[] {
       type: "invoice",
       issues: [
         {
-          field: "action_vat_destination_match",
-          expected: "Invoice must include French VAT for France destination",
+          field: "vat_destination_match",
+          expected: "Invoice must include a French VAT for the France destination",
           actual:
-            "Invoice missing French VAT FR03813041969 for destination Saint Martin de Crau.",
+            "Invoice is missing a French VAT for the destination Marseille, France (VAT field not provided).",
           severity: "error",
           rule: "VAT destination mismatch",
           relatedDocName: "Vendor Invoice.pdf",
-          highlight: { page: 1, x: 300, y: 150, w: 250, h: 30 },
+          highlight: { page: 1, x: 305, y: 150, w: 250, h: 98 },
         },
         {
-          field: "action_transport_signed",
+          field: "transport_original",
           expected: "Transport document must be an original without watermarks",
           actual:
-            "FCR contains a prominent \'COPY\' watermark; document is not an original.",
+            "FCR carries a prominent 'COPY' watermark; the document is not an original.",
           severity: "error",
           rule: "Transport document must be original",
           relatedDocName: "Transport Document.pdf",
           highlight: { page: 1, x: 60, y: 300, w: 475, h: 240 },
         },
         {
-          field: "action_final_ports_match",
-          expected: "Body final destination must match FCR Place of Delivery",
+          field: "final_destination_match",
+          expected: "Invoice final destination must match the FCR place of delivery",
           actual:
-            "Body final destination QINGDAO conflicts with FCR Place of Delivery Saint Martin de Crau.",
+            "Invoice final destination Marseille conflicts with FCR place of delivery Saint Martin de Crau.",
           severity: "error",
           rule: "Final destination mismatch",
           relatedDocName: "Transport Document.pdf",
-          highlight: { page: 1, x: 50, y: 250, w: 300, h: 30 },
+          highlight: { page: 1, x: 300, y: 586, w: 255, h: 16 },
         },
       ],
     },
@@ -1267,15 +1228,15 @@ export function getHardcodedResults(): ValidationResult[] {
       type: "invoice",
       issues: [
         {
-          field: "aeo_invoice_number_match",
+          field: "invoice_number_match",
           expected:
-            "Shipbill number must match Invoice number or Vendor Reference",
+            "Shipbill number must match the Invoice number or Vendor Reference",
           actual:
-            "Shipbill No: ACL-25-26-830 does not match Invoice No: 4686384 or Vendor Reference No: ACL2526830.",
+            "Shipbill No ACL-25-26-830 does not match Invoice No 4686384 or Vendor Reference ACL2526830.",
           severity: "error",
           rule: "Invoice number mismatch",
           relatedDocName: "Vendor Invoice.pdf",
-          highlight: { page: 1, x: 50, y: 100, w: 250, h: 30 },
+          highlight: { page: 1, x: 40, y: 80, w: 240, h: 20 },
         },
       ],
     },
@@ -1283,11 +1244,11 @@ export function getHardcodedResults(): ValidationResult[] {
       type: "country_specific",
       issues: [
         {
-          field: "aeo_usa_country_declaration",
+          field: "usa_country_declaration",
           expected:
-            "Single/Multi Country Declaration required for apparel shipments",
+            "Single / Multi Country Declaration required for apparel shipments",
           actual:
-            "Apparel shipment (AEOI); Single/Multi Country Declaration is missing.",
+            "Apparel shipment to the USA; the Single / Multi Country Declaration is missing.",
           severity: "error",
           rule: "Missing country declaration for apparel",
           relatedDocName: "Supporting Documents.pdf",
