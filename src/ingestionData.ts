@@ -808,11 +808,12 @@ function makeDocs(i: number, ref: string) {
     "Vendor Invoice.pdf",
   ];
   const prefix = `d${i + 1}`;
+  const base = process.env.PUBLIC_URL || "";
   return pdfs.map((pdfName, j) => ({
     id: `${prefix}_${j + 1}`,
     name: pdfName,
     type: docTypeMap[pdfName] || ("shipment" as const),
-    pdfPath: `/documents/${ref}/${pdfName}`,
+    pdfPath: `${base}/documents/${ref}/${pdfName}`,
     content: { fields: {} },
   }));
 }

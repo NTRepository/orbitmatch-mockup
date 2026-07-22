@@ -127,7 +127,7 @@ function App() {
       <header className="border-b border-gray-200 bg-white sticky top-0 z-10">
         <div className="mx-auto px-8 py-3 flex items-center justify-between" style={{ maxWidth: '1600px' }}>
           <div className="flex items-center gap-3">
-            <img src="/OrbitMATCH logo.svg" alt="OrbitMATCH" className="h-10" />
+            <img src={`${process.env.PUBLIC_URL}/OrbitMATCH logo.svg`} alt="OrbitMATCH" className="h-10" />
           </div>
           <div className="flex items-center gap-3">
             <span className="text-sm text-gray-600 font-medium">S. Khanna</span>
