@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { ValidationResult, UploadedDocument, IngestionSource } from './types';
 import { allShipbills, getHardcodedResults } from './ingestionData';
 import DocumentPreview from './components/DocumentPreview';
@@ -15,12 +15,6 @@ interface ProcessedShipbill {
   docCount: number;
   result: ValidationResult | null; // null = still processing
 }
-
-const sourceConfig: Record<IngestionSource, { label: string; color: string }> = {
-  email: { label: 'Email', color: 'bg-blue-500 border-blue-500 text-white' },
-  api: { label: 'API', color: 'bg-purple-500 border-purple-500 text-white' },
-  vendor_portal: { label: 'Portal', color: 'bg-amber-500 border-amber-500 text-white' },
-};
 
 function App() {
   const [activeTab, setActiveTab] = useState<TabKey>('incoming');
@@ -57,67 +51,65 @@ function App() {
     setToasts((prev) => [...prev, { id, text: `${r.documentName} overridden and moved to passed` }]);
   }, []);
 
-  // Process a shipbill: determine result and move to correct tab
-  const processShipbill = useCallback((item: ProcessedShipbill) => {
+  // Resolve one shipbill: move it out of Processing into Passed / Exceptions.
+  const resolveShipbill = useCallback((item: ProcessedShipbill) => {
     const hardcoded = hardcodedResults.current.find((r) => r.shipbillRef === item.referenceNumber);
 
-    setTimeout(() => {
-      // Remove from incoming
-      setIncoming((prev) => prev.filter((p) => p.id !== item.id));
+    setIncoming((prev) => prev.filter((p) => p.id !== item.id));
 
-      if (hardcoded) {
-        const processed = { ...item, result: hardcoded };
-        if (hardcoded.status === 'pass') {
-          setPassed((prev) => [...prev, processed]);
-        } else {
-          setErrors((prev) => [...prev, processed]);
-        }
+    if (hardcoded) {
+      const processed = { ...item, result: hardcoded };
+      if (hardcoded.status === 'pass') {
+        setPassed((prev) => [...prev, processed]);
       } else {
-        // Mock shipbills always pass
-        const passResult: ValidationResult = {
-          documentId: item.id,
-          documentName: item.referenceNumber,
-          documentType: 'invoice',
-          shipbillRef: item.referenceNumber,
-          status: 'pass',
-          issues: [],
-        };
-        setPassed((prev) => [...prev, { ...item, result: passResult }]);
+        setErrors((prev) => [...prev, processed]);
       }
-    }, 5000 + Math.random() * 1000); // Processing takes 5-6s
+    } else {
+      // Mock shipbills always pass
+      const passResult: ValidationResult = {
+        documentId: item.id,
+        documentName: item.referenceNumber,
+        documentType: 'invoice',
+        shipbillRef: item.referenceNumber,
+        status: 'pass',
+        issues: [],
+      };
+      setPassed((prev) => [...prev, { ...item, result: passResult }]);
+    }
   }, []);
 
-  // Feed shipbills in one at a time
-  const [feedIdx, setFeedIdx] = useState(0);
+  // Batch release: nothing is processed until the user clicks "Release".
+  const [released, setReleased] = useState(false);
 
-  useEffect(() => {
-    if (feedIdx >= allShipbills.length) return;
+  const handleRelease = useCallback(() => {
+    setReleased(true);
+    setActiveTab('incoming');
 
-    const delay = feedIdx === 0 ? 5000 : 800 + Math.random() * 1000;
-    const timer = setTimeout(() => {
-      const sb = allShipbills[feedIdx];
-      const item: ProcessedShipbill = {
-        id: sb.id,
-        referenceNumber: sb.referenceNumber,
-        source: sb.source,
-        sourceDetail: sb.sourceDetail,
-        receivedAt: sb.receivedAt,
-        docCount: sb.documents.length,
-        result: null,
-      };
+    const items: ProcessedShipbill[] = allShipbills.map((sb) => ({
+      id: sb.id,
+      referenceNumber: sb.referenceNumber,
+      source: sb.source,
+      sourceDetail: sb.sourceDetail,
+      receivedAt: sb.receivedAt,
+      docCount: sb.documents.length,
+      result: null,
+    }));
 
-      setIncoming((prev) => [...prev, item]);
-
-      // Start processing after appearing
-      setTimeout(() => processShipbill(item), 500);
-      setFeedIdx((i) => i + 1);
-    }, delay);
-
-    return () => clearTimeout(timer);
-  }, [feedIdx, processShipbill]);
+    // All shipbills appear in Processing at once, then resolve one at a
+    // time with a random 1-5s pause between each, so it reads as live.
+    setIncoming(items);
+    let i = 0;
+    const step = () => {
+      if (i >= items.length) return;
+      resolveShipbill(items[i]);
+      i += 1;
+      window.setTimeout(step, 1000 + Math.random() * 4000);
+    };
+    window.setTimeout(step, 1000 + Math.random() * 4000);
+  }, [resolveShipbill]);
 
   const tabs: { key: TabKey; label: string; count: number; dotColor: string }[] = [
-    { key: 'incoming', label: 'Incoming', count: incoming.length, dotColor: 'bg-blue-500' },
+    { key: 'incoming', label: 'Processing', count: incoming.length, dotColor: 'bg-blue-500' },
     { key: 'passed', label: 'Passed', count: passed.length, dotColor: 'bg-emerald-500' },
     { key: 'errors', label: 'Exceptions', count: errors.length, dotColor: 'bg-red-500' },
   ];
@@ -153,15 +145,23 @@ function App() {
               </span>
               <span className="text-xs text-gray-500">Live</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              {(['email', 'api', 'vendor_portal'] as IngestionSource[]).map((s) => (
-                <span key={s} className={`inline-flex items-center px-2 py-0.5 rounded-full border text-[10px] font-medium ${sourceConfig[s].color}`}>
-                  {sourceConfig[s].label}
-                </span>
-              ))}
-            </div>
           </div>
         </div>
+
+        {/* Batch release gate */}
+        {!released && (
+          <div className="mb-6 flex items-center gap-4 border border-gray-200 rounded-xl bg-white px-6 py-4 shadow-sm">
+            <button
+              onClick={handleRelease}
+              className="px-6 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold transition-colors shadow-sm whitespace-nowrap"
+            >
+              Release for processing
+            </button>
+            <p className="text-sm text-gray-500">
+              Incoming batch of {allShipbills.length} Shipbills. Please release for processing.
+            </p>
+          </div>
+        )}
 
         {/* Tabs */}
         <div className="flex border-b border-gray-200 mb-6">
@@ -265,7 +265,6 @@ function ShipbillRow({ item, processing, onClick, selected, hasError }: {
   selected?: boolean;
   hasError?: boolean;
 }) {
-  const cfg = sourceConfig[item.source];
   return (
     <div
       onClick={onClick}
@@ -275,9 +274,6 @@ function ShipbillRow({ item, processing, onClick, selected, hasError }: {
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <span className={`inline-flex items-center px-2 py-0.5 rounded-full border text-[10px] font-medium ${cfg.color}`}>
-            {cfg.label}
-          </span>
           <span className="text-sm font-semibold text-gray-900 font-mono">{item.referenceNumber}</span>
         </div>
         <div className="flex items-center gap-2">
@@ -306,8 +302,6 @@ function ShipbillRow({ item, processing, onClick, selected, hasError }: {
         </div>
       </div>
       <div className="flex items-center gap-2 mt-1.5 text-[11px] text-gray-500">
-        <span className="font-mono truncate">{item.sourceDetail}</span>
-        <span className="text-gray-300">·</span>
         <span>{item.docCount} doc{item.docCount > 1 ? 's' : ''}</span>
         {hasError && item.result && (
           <>
