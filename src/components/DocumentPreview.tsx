@@ -148,7 +148,7 @@ export default function DocumentPreview({ result, documents, onPassToShipbill }:
         <div className="flex-1 overflow-auto">
           {result.issues.length === 0 ? (
             <div className="p-5 space-y-4">
-              <div className="flex items-center gap-2 mb-3 bg-brand-600 text-white rounded-lg px-4 py-3">
+              <div className="flex items-center gap-2 mb-3 bg-brand-500 text-white rounded-lg px-4 py-3">
                 <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -220,7 +220,7 @@ export default function DocumentPreview({ result, documents, onPassToShipbill }:
                   onClick={() => { setSelectedDocIdx(idx); setActiveIssue(null); }}
                   className={`px-3 py-1.5 rounded-md text-[11px] font-medium whitespace-nowrap transition-colors ${
                     idx === selectedDocIdx
-                      ? 'bg-brand-600 text-white'
+                      ? 'bg-brand-500 text-white'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >

@@ -153,7 +153,7 @@ function App() {
           <div className="mb-6 flex items-center gap-4 border border-gray-200 rounded-xl bg-white px-6 py-4 shadow-sm">
             <button
               onClick={handleRelease}
-              className="px-6 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold transition-colors shadow-sm whitespace-nowrap"
+              className="px-6 py-2.5 rounded-lg bg-brand-500 hover:bg-brand-800 text-white text-sm font-semibold transition-colors shadow-sm whitespace-nowrap"
             >
               Release for processing
             </button>
@@ -176,12 +176,12 @@ function App() {
               <span className={`w-2 h-2 rounded-full ${tab.dotColor}`} />
               {tab.label}
               <span className={`ml-1 px-1.5 py-0.5 rounded-full text-[10px] ${
-                activeTab === tab.key ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500'
+                activeTab === tab.key ? 'bg-brand-500 text-white' : 'bg-gray-100 text-gray-500'
               }`}>
                 {tab.count}
               </span>
               {activeTab === tab.key && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-900" />
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-500" />
               )}
             </button>
           ))}
