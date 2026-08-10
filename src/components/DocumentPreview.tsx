@@ -93,7 +93,7 @@ export default function DocumentPreview({ result, documents, onPassToShipbill }:
   return (
     <div className="border border-gray-200 rounded-xl bg-white overflow-hidden flex flex-col h-full min-h-[400px]">
       {/* Header */}
-      <div className="px-5 py-3 border-b border-gray-100 flex items-center justify-between">
+      <div className="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
         <div>
           <h3 className="text-sm font-semibold text-gray-900">{result.shipbillRef}</h3>
           <p className="text-xs text-gray-400">{shipbillDocs.length} document{shipbillDocs.length > 1 ? 's' : ''} in shipbill</p>
@@ -120,12 +120,12 @@ export default function DocumentPreview({ result, documents, onPassToShipbill }:
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-gray-100">
+      <div className="flex border-b border-gray-200">
         <button
           onClick={() => { setTab('details'); setActiveIssue(null); }}
           className={`px-4 py-2 text-xs font-medium transition-colors ${
             tab === 'details'
-              ? 'text-brand-700 border-b-2 border-brand-600'
+              ? 'text-gray-900 border-b-2 border-gray-900'
               : 'text-gray-400 hover:text-gray-600'
           }`}
         >
@@ -135,7 +135,7 @@ export default function DocumentPreview({ result, documents, onPassToShipbill }:
           onClick={() => setTab('document')}
           className={`px-4 py-2 text-xs font-medium transition-colors ${
             tab === 'document'
-              ? 'text-brand-700 border-b-2 border-brand-600'
+              ? 'text-gray-900 border-b-2 border-gray-900'
               : 'text-gray-400 hover:text-gray-600'
           }`}
         >
@@ -213,7 +213,7 @@ export default function DocumentPreview({ result, documents, onPassToShipbill }:
         <div className="flex-1 flex flex-col min-h-0">
           {/* Doc selector */}
           {shipbillDocs.length > 1 && (
-            <div className="px-4 py-2 border-b border-gray-50 flex gap-1 overflow-x-auto">
+            <div className="px-4 py-2.5 border-b border-gray-200 flex gap-1 overflow-x-auto">
               {shipbillDocs.map((doc, idx) => (
                 <button
                   key={doc.id}
@@ -232,10 +232,20 @@ export default function DocumentPreview({ result, documents, onPassToShipbill }:
 
           {/* Page nav */}
           {numPages > 1 && (
-            <div className="px-4 py-1.5 border-b border-gray-50 flex items-center gap-2 text-xs text-gray-500">
-              <button disabled={currentPage <= 1} onClick={() => setCurrentPage((p) => p - 1)} className="disabled:opacity-30 hover:text-gray-900">Prev</button>
-              <span>Page {currentPage} of {numPages}</span>
-              <button disabled={currentPage >= numPages} onClick={() => setCurrentPage((p) => p + 1)} className="disabled:opacity-30 hover:text-gray-900">Next</button>
+            <div className="px-4 py-2 border-b border-gray-200 flex items-center gap-2 text-xs text-gray-500">
+              <span className="font-medium">Page</span>
+              <input
+                type="number"
+                min={1}
+                max={numPages}
+                value={currentPage}
+                onChange={(e) => {
+                  const v = parseInt(e.target.value, 10);
+                  if (!isNaN(v)) setCurrentPage(Math.min(numPages, Math.max(1, v)));
+                }}
+                className="w-12 border border-gray-300 rounded-md px-2 py-1 text-center text-gray-900 tabular-nums focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500"
+              />
+              <span>of {numPages}</span>
             </div>
           )}
 

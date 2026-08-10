@@ -170,18 +170,18 @@ function App() {
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
               className={`flex items-center gap-2 px-4 py-2.5 text-xs font-medium transition-colors relative ${
-                activeTab === tab.key ? 'text-brand-700' : 'text-gray-400 hover:text-gray-600'
+                activeTab === tab.key ? 'text-gray-900' : 'text-gray-400 hover:text-gray-600'
               }`}
             >
               <span className={`w-2 h-2 rounded-full ${tab.dotColor}`} />
               {tab.label}
               <span className={`ml-1 px-1.5 py-0.5 rounded-full text-[10px] ${
-                activeTab === tab.key ? 'bg-brand-600 text-white' : 'bg-gray-100 text-gray-500'
+                activeTab === tab.key ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500'
               }`}>
                 {tab.count}
               </span>
               {activeTab === tab.key && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-600" />
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-900" />
               )}
             </button>
           ))}
@@ -270,7 +270,7 @@ function ShipbillRow({ item, processing, onClick, selected, hasError }: {
     <div
       onClick={onClick}
       className={`p-3.5 bg-white border rounded-lg animate-fade-in transition-all ${
-        selected ? 'border-brand-500 shadow-sm' : 'border-gray-200 hover:border-gray-300'
+        selected ? 'border-gray-900 shadow-sm' : 'border-gray-300 hover:border-gray-400'
       } ${onClick ? 'cursor-pointer' : ''}`}
     >
       <div className="flex items-center justify-between">
