@@ -102,14 +102,14 @@ export default function DocumentPreview({ result, documents, onPassToShipbill }:
           {result.status !== 'pass' && onPassToShipbill && (
             <button
               onClick={() => onPassToShipbill(result)}
-              className="text-[11px] font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-3 py-1 rounded-md transition-colors"
+              className="text-[11px] font-medium text-brand-700 bg-brand-50 hover:bg-brand-100 border border-brand-200 px-3 py-1 rounded-md transition-colors"
             >
               Override & Accept
             </button>
           )}
           <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
             result.status === 'pass'
-              ? 'bg-emerald-50 text-emerald-700'
+              ? 'bg-emerald-100 text-emerald-800'
               : result.status === 'warning'
               ? 'bg-amber-50 text-amber-700'
               : 'bg-red-50 text-red-700'
@@ -125,7 +125,7 @@ export default function DocumentPreview({ result, documents, onPassToShipbill }:
           onClick={() => { setTab('details'); setActiveIssue(null); }}
           className={`px-4 py-2 text-xs font-medium transition-colors ${
             tab === 'details'
-              ? 'text-gray-900 border-b-2 border-gray-900'
+              ? 'text-brand-700 border-b-2 border-brand-600'
               : 'text-gray-400 hover:text-gray-600'
           }`}
         >
@@ -135,7 +135,7 @@ export default function DocumentPreview({ result, documents, onPassToShipbill }:
           onClick={() => setTab('document')}
           className={`px-4 py-2 text-xs font-medium transition-colors ${
             tab === 'document'
-              ? 'text-gray-900 border-b-2 border-gray-900'
+              ? 'text-brand-700 border-b-2 border-brand-600'
               : 'text-gray-400 hover:text-gray-600'
           }`}
         >
@@ -148,12 +148,12 @@ export default function DocumentPreview({ result, documents, onPassToShipbill }:
         <div className="flex-1 overflow-auto">
           {result.issues.length === 0 ? (
             <div className="p-5 space-y-4">
-              <div className="flex items-center gap-2 mb-1">
-                <svg className="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="flex items-center gap-2 mb-3 bg-brand-600 text-white rounded-lg px-4 py-3">
+                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span className="text-sm font-semibold text-gray-800">All checks passed</span>
-                <span className="text-[10px] text-gray-400 ml-auto">{passedChecks.reduce((n, c) => n + c.checks.length, 0)} checks</span>
+                <span className="text-sm font-semibold">All checks passed</span>
+                <span className="text-[10px] font-medium ml-auto bg-white/15 rounded-full px-2 py-0.5">{passedChecks.reduce((n, c) => n + c.checks.length, 0)} checks</span>
               </div>
               {passedChecks.map((group) => (
                 <div key={group.category}>
@@ -220,7 +220,7 @@ export default function DocumentPreview({ result, documents, onPassToShipbill }:
                   onClick={() => { setSelectedDocIdx(idx); setActiveIssue(null); }}
                   className={`px-3 py-1.5 rounded-md text-[11px] font-medium whitespace-nowrap transition-colors ${
                     idx === selectedDocIdx
-                      ? 'bg-gray-900 text-white'
+                      ? 'bg-brand-600 text-white'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >

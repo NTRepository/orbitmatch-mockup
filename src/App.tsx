@@ -17,9 +17,9 @@ interface ProcessedShipbill {
 }
 
 const sourceConfig: Record<IngestionSource, { label: string; color: string }> = {
-  email: { label: 'Email', color: 'bg-blue-50 border-blue-200 text-blue-700' },
-  api: { label: 'API', color: 'bg-purple-50 border-purple-200 text-purple-700' },
-  vendor_portal: { label: 'Portal', color: 'bg-amber-50 border-amber-200 text-amber-700' },
+  email: { label: 'Email', color: 'bg-blue-500 border-blue-500 text-white' },
+  api: { label: 'API', color: 'bg-purple-500 border-purple-500 text-white' },
+  vendor_portal: { label: 'Portal', color: 'bg-amber-500 border-amber-500 text-white' },
 };
 
 function App() {
@@ -170,18 +170,18 @@ function App() {
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
               className={`flex items-center gap-2 px-4 py-2.5 text-xs font-medium transition-colors relative ${
-                activeTab === tab.key ? 'text-gray-900' : 'text-gray-400 hover:text-gray-600'
+                activeTab === tab.key ? 'text-brand-700' : 'text-gray-400 hover:text-gray-600'
               }`}
             >
               <span className={`w-2 h-2 rounded-full ${tab.dotColor}`} />
               {tab.label}
               <span className={`ml-1 px-1.5 py-0.5 rounded-full text-[10px] ${
-                activeTab === tab.key ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500'
+                activeTab === tab.key ? 'bg-brand-600 text-white' : 'bg-gray-100 text-gray-500'
               }`}>
                 {tab.count}
               </span>
               {activeTab === tab.key && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-900" />
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-600" />
               )}
             </button>
           ))}
@@ -270,7 +270,7 @@ function ShipbillRow({ item, processing, onClick, selected, hasError }: {
     <div
       onClick={onClick}
       className={`p-3.5 bg-white border rounded-lg animate-fade-in transition-all ${
-        selected ? 'border-gray-900 shadow-sm' : 'border-gray-200 hover:border-gray-300'
+        selected ? 'border-brand-500 shadow-sm' : 'border-gray-200 hover:border-gray-300'
       } ${onClick ? 'cursor-pointer' : ''}`}
     >
       <div className="flex items-center justify-between">
@@ -282,25 +282,25 @@ function ShipbillRow({ item, processing, onClick, selected, hasError }: {
         </div>
         <div className="flex items-center gap-2">
           {processing && (
-            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-blue-50 border border-blue-200 text-[10px] text-blue-700 font-medium">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-100 border border-blue-200 text-[10px] text-blue-700 font-medium">
               <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
-              processing
+              Processing
             </span>
           )}
           {!processing && !hasError && (
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-[10px] text-emerald-700 font-medium">
-              passed
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-emerald-100 border border-emerald-300 text-[10px] text-emerald-800 font-medium">
+              Passed
             </span>
           )}
           {hasError && (
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-red-50 border border-red-200 text-[10px] text-red-700 font-medium">
-              rejected
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-red-100 border border-red-200 text-[10px] text-red-700 font-medium">
+              Rejected
             </span>
           )}
-          <span className="text-[10px] text-gray-400 font-mono">
+          <span className="text-xs text-gray-500 font-mono">
             {new Date(item.receivedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </span>
         </div>
